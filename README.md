@@ -12,3 +12,14 @@
 ## Frontend
 
 ## Models
+
+```python
+class Words:
+  spell:str
+  meaning:str
+
+class Examples:
+  sentence: str
+  translation: str
+  word: ForeignKey
+```
