@@ -11,3 +11,4 @@ class WordFactory:
         db.add(db_word)
         db.commit()
         db.refresh(db_word)
+        return db_word
