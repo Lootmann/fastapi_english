@@ -15,8 +15,10 @@ router = APIRouter(tags=["words"])
     response_model=List[word_model.WordRead],
     status_code=status.HTTP_200_OK,
 )
-def read_all_words(*, db: Session = Depends(get_session)):
-    return word_api.get_all_words(db)
+def read_all_words(*, db: Session = Depends(get_session), spell: str = None):
+    if not spell:
+        return word_api.get_all_words(db)
+    return word_api.find_by_spell(db, spell)
 
 
 @router.get(

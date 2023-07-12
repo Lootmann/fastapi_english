@@ -32,3 +32,20 @@ class TestRouterWordsGET:
 
         assert resp.status_code == status.HTTP_404_NOT_FOUND
         assert data == {"detail": "Word 99999: Not Found"}
+
+    def test_search_words(self, client: TestClient, session: Session):
+        WordFactory.create_word(session, spell="hoge", meaning="てすと")
+        WordFactory.create_word(session, spell="hage", meaning="てすと")
+        WordFactory.create_word(session, spell="hige", meaning="てすと")
+
+        resp = client.get("/words?spell=h")
+        data = resp.json()
+        assert len(data) == 3
+
+        resp = client.get("/words?spell=age")
+        data = resp.json()
+        assert len(data) == 1
+
+        resp = client.get("/words?spell=zyx")
+        data = resp.json()
+        assert len(data) == 0
