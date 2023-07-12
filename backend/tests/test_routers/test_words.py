@@ -42,6 +42,10 @@ class TestRouterWordsGET:
         data = resp.json()
         assert len(data) == 3
 
+        resp = client.get("/words?spell=H")
+        data = resp.json()
+        assert len(data) == 3
+
         resp = client.get("/words?spell=age")
         data = resp.json()
         assert len(data) == 1
