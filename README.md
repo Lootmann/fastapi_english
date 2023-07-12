@@ -4,6 +4,13 @@
 
 ## Envs
 
+- packages
+  - fastapi
+  - uvicorn
+  - pytest
+  - coverage
+  - sqlmodel
+
 ## Backend
 
 - [FastAPI](https://github.com/tiangolo/fastapi)
@@ -23,3 +30,8 @@ class Examples:
   translation: str
   word: ForeignKey
 ```
+
+## Tips
+
+1. PUT vs PATCH
+   https://qiita.com/murata0705/items/52538c08778c39a91ec2
