@@ -14,7 +14,20 @@ def find_by_id(db: Session, word_id: int) -> word_model.WordRead | None:
     return db.exec(stmt).first()
 
 
-def find_by_spell(db: Session, spell: str) -> List[word_model.WordRead]:
+def filter_by_spell(db: Session, spell: str) -> List[word_model.WordRead]:
     # FIXME: There has to be a better way :^)
     stmt = select(word_model.Word).filter(word_model.Word.spell.ilike(f"%{spell}%"))
     return db.exec(stmt).all()
+
+
+def find_by_spell(db: Session, spell: str) -> word_model.WordRead | None:
+    stmt = select(word_model.Word).where(word_model.Word.spell == spell)
+    return db.exec(stmt).first()
+
+
+def create_word(db: Session, word: word_model.Word) -> word_model.WordRead:
+    db_word = word_model.Word.from_orm(word)
+    db.add(db_word)
+    db.commit()
+    db.refresh(db_word)
+    return db_word

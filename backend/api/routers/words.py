@@ -18,7 +18,7 @@ router = APIRouter(tags=["words"])
 def read_all_words(*, db: Session = Depends(get_session), spell: str = None):
     if not spell:
         return word_api.get_all_words(db)
-    return word_api.find_by_spell(db, spell)
+    return word_api.filter_by_spell(db, spell)
 
 
 @router.get(
@@ -33,3 +33,17 @@ def get_word(*, db: Session = Depends(get_session), word_id: int):
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Word {word_id}: Not Found"
         )
     return found
+
+
+@router.post(
+    "/words",
+    response_model=word_model.WordRead,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_word(*, db: Session = Depends(get_session), word: word_model.WordCreate):
+    found = word_api.find_by_spell(db, word.spell)
+    if found:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Word {word.spell} is duplicated"
+        )
+    return word_api.create_word(db, word)

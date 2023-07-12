@@ -49,3 +49,28 @@ class TestRouterWordsGET:
         resp = client.get("/words?spell=zyx")
         data = resp.json()
         assert len(data) == 0
+
+
+class TestRouterWordsPOST:
+    def test_create_word(self, client: TestClient, session: Session):
+        resp = client.get("/words")
+        data = resp.json()
+        assert len(data) == 0
+
+        resp = client.post("/words", json={"spell": "hoge", "meaning": "ほげ"})
+        data = resp.json()
+        assert resp.status_code == status.HTTP_201_CREATED
+        assert data["spell"] == "hoge"
+        assert data["meaning"] == "ほげ"
+
+        resp = client.get("/words")
+        data = resp.json()
+        assert len(data) == 1
+
+    def test_create_dup_word(self, client: TestClient, session: Session):
+        resp = client.post("/words", json={"spell": "hoge", "meaning": "ほげ"})
+        resp = client.post("/words", json={"spell": "hoge", "meaning": "ひげ"})
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+
+        data = resp.json()
+        assert data["detail"] == "Word hoge is duplicated"
