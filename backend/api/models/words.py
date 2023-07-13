@@ -23,5 +23,6 @@ class WordRead(WordBase):
     id: int
 
 
-class WordUpdate(WordBase):
-    pass
+class WordUpdate(SQLModel):
+    spell: Optional[str] = None
+    meaning: Optional[str] = None

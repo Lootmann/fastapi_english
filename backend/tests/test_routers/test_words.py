@@ -78,3 +78,52 @@ class TestRouterWordsPOST:
 
         data = resp.json()
         assert data["detail"] == "Word hoge is duplicated"
+
+
+class TestRouterWordsPATCH:
+    def test_udpate_word_when_both_empty(self, client: TestClient, session: Session):
+        word = WordFactory.create_word(session, spell="hoge", meaning="てすと")
+
+        resp = client.patch(f"/words/{word.id}", json={})
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert data["detail"] == "Word Empty"
+
+    def test_update_word_when_spell_is_empty(self, client: TestClient, session: Session):
+        word = WordFactory.create_word(session, spell="hoge", meaning="てすと")
+
+        resp = client.patch(f"/words/{word.id}", json={"meaning": "ほげげ"})
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_200_OK
+        assert data["spell"] == "hoge"
+        assert data["meaning"] == "ほげげ"
+
+    def test_update_word_when_meaning_is_empty(self, client: TestClient, session: Session):
+        word = WordFactory.create_word(session, spell="hoge", meaning="てすと")
+
+        resp = client.patch(f"/words/{word.id}", json={"spell": "hige"})
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_200_OK
+        assert data["spell"] == "hige"
+        assert data["meaning"] == "てすと"
+
+    def test_update_word_when_word_id_is_wrong(self, client: TestClient, session: Session):
+        word = WordFactory.create_word(session, spell="hoge", meaning="てすと")
+
+        resp = client.patch(f"/words/{word.id + 100}", json={"spell": "hige", "meaning": "ててて"})
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+        assert data["detail"] == f"Word {word.id + 100} Not Found"
+
+    def test_update_word_when_word_is_duplicated(self, client: TestClient, session: Session):
+        word = WordFactory.create_word(session, spell="hoge", meaning="てすと")
+
+        resp = client.patch(f"/words/{word.id}", json={"spell": "hoge", "meaning": "すてて"})
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_409_CONFLICT
+        assert data["detail"] == "Word hoge is duplicated"

@@ -21,7 +21,7 @@ def filter_by_spell(db: Session, spell: str) -> List[word_model.WordRead]:
 
 
 def find_by_spell(db: Session, spell: str) -> word_model.WordRead | None:
-    stmt = select(word_model.Word).where(word_model.Word.spell == spell)
+    stmt = select(word_model.Word).where(word_model.Word.spell == spell.lower())
     return db.exec(stmt).first()
 
 
@@ -31,3 +31,17 @@ def create_word(db: Session, word: word_model.Word) -> word_model.WordRead:
     db.commit()
     db.refresh(db_word)
     return db_word
+
+
+def update_word(db: Session, origin: word_model.Word, word: word_model.Word) -> word_model.WordRead:
+    if word.spell is not None:
+        origin.spell = word.spell
+
+    if word.meaning is not None:
+        origin.meaning = word.meaning
+
+    db.add(origin)
+    db.commit()
+    db.refresh(origin)
+
+    return origin
