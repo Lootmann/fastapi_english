@@ -127,3 +127,25 @@ class TestRouterWordsPATCH:
 
         assert resp.status_code == status.HTTP_409_CONFLICT
         assert data["detail"] == "Word hoge is duplicated"
+
+
+class TestRouterWordsDELETE:
+    def test_delete_word(self, client: TestClient, session: Session):
+        word = WordFactory.create_word(session, spell="hoge", meaning="てすと")
+
+        resp = client.get("/words")
+        data = resp.json()
+        assert len(data) == 1
+
+        resp = client.delete(f"/words/{word.id}")
+        data = resp.json()
+        assert resp.status_code == status.HTTP_200_OK
+        assert data == None
+
+    def test_delete_word_when_word_id_is_wrong(self, client: TestClient, session: Session):
+        word = WordFactory.create_word(session, spell="hoge", meaning="てすと")
+
+        resp = client.delete(f"/words/{word.id + 100}")
+        data = resp.json()
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+        assert data["detail"] == f"Word {word.id + 100} Not Found"

@@ -45,3 +45,8 @@ def update_word(db: Session, origin: word_model.Word, word: word_model.Word) -> 
     db.refresh(origin)
 
     return origin
+
+
+def delete_word(db: Session, origin: word_model.Word) -> None:
+    db.delete(origin)
+    db.commit()

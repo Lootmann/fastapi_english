@@ -78,3 +78,13 @@ def update_word(*, db: Session = Depends(get_session), word_id: int, word: word_
             )
 
     return word_api.update_word(db, origin, word)
+
+
+@router.delete("/words/{word_id}", response_model=None, status_code=status.HTTP_200_OK)
+def delete_word(*, db: Session = Depends(get_session), word_id: int):
+    origin = word_api.find_by_id(db, word_id)
+    if not origin:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Word {word_id} Not Found"
+        )
+    return word_api.delete_word(db, origin)
