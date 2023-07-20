@@ -32,11 +32,12 @@ class Example(ExampleBase, table=True):
 
 
 class ExampleCreate(ExampleBase):
-    pass
+    word_id: Optional[int] = Field(default=None, foreign_key="word.id")
 
 
 class ExampleRead(ExampleBase):
     id: int
+    word_id: Optional[int] = Field(default=None, foreign_key="word.id")
 
 
 class ExampleUpdate(SQLModel):
