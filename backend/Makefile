@@ -19,10 +19,7 @@ measure:
 	$(OPTION) python3 -m pytest --durations=0
 
 cov:
-	$(OPTION) python3 -m pytest --cov --cov-report=html
-
-report:
-	google-chrome ./htmlcov/index.html
+	$(OPTION) python3 -m pytest --cov --cov-report=html && google-chrome ./htmlcov/index.html
 
 profile:
 	$(OPTION) python3 -m pytest --profile-svg
