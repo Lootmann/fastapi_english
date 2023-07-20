@@ -5,7 +5,7 @@ from sqlmodel import Session
 from tests.factory import ExampleFactory, WordFactory
 
 
-class TestRouterWordsGET:
+class TestRouterExamplesGET:
     def test_get_all_examples(self, client: TestClient, session: Session):
         word = WordFactory.create_word(session, spell="hello", meaning="こんにちは")
 
