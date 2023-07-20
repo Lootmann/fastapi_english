@@ -31,6 +31,11 @@ python_files = ["test_*.py"]
 python_classes = ["Test"]
 python_functions = ["test"]
 
-[tool.coverage.run]
-concurrency = ["multiprocessing", "greenlet", "thread"]
-omit = ["tests/*", "venv", "./api/db.py", "**/*/__init__.py"]
+[tool.coverage]
+  [tool.coverage.run]
+  #when you need async-await function test...
+  #concurrency = ["multiprocessing", "greenlet", "thread"]
+  omit = ["tests/*", "venv", "./api/db.py", "**/*/__init__.py"]
+
+  [tool.coverage.report]
+  exclude_lines = ["if TYPE_CHECKING:"]
