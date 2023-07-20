@@ -1,5 +1,6 @@
 from sqlmodel import Session, create_engine
 
+from api.models.examples import Example
 from api.models.words import Word
 
 sqlite_file_name = "dev.db"
@@ -17,3 +18,6 @@ def get_session():
 if __name__ == "__main__":
     Word.metadata.drop_all(engine)
     Word.metadata.create_all(engine)
+
+    Example.metadata.drop_all(engine)
+    Example.metadata.create_all(engine)
