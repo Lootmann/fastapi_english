@@ -1,23 +1,21 @@
 import React from "react";
-import "./App.css";
+
+function randomNumberInRange(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
+  const nums: number[] = Array(50)
+    .fill(undefined)
+    .map(() => randomNumberInRange(0, 100));
 
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  return (
+    <div className="min-h-screen bg-slate-800 text-slate-100 p-4 text-xl">
+      <h1>hello world</h1>
+
+      {nums.map((num) => (
+        <p>{num}</p>
+      ))}
     </div>
   );
 }
